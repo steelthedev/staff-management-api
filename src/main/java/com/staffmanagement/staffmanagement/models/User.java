@@ -3,38 +3,39 @@ package com.staffmanagement.staffmanagement.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "Users")
+public class User {
 
-public class Employee{
     @Id
     @GeneratedValue
     private Long id;
     private String firstName;
     private String lastName;
     private String email;
-    private Long phoneNumber;
-    private String address;
-    private String city;
-    private  String zipCode;
+    private String username;
+    private String password;
 
 
-    public Employee(){};
-    public Employee(String firstName, String lastName, String email, Long phoneNumber, String address, String city, String zipCode) {
+
+    private Role role;
+
+    public User(){};
+
+    public User(String firstName, String lastName, String email, String username, String password, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.city = city;
-        this.zipCode = zipCode;
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
-
 
     public Long getId() {
         return id;
     }
-
 
     public void setId(Long id) {
         this.id = id;
@@ -64,49 +65,43 @@ public class Employee{
         this.email = email;
     }
 
-    public Long getPhoneNumber() {
-        return phoneNumber;
+    public String getUsername() {
+        return username;
     }
 
-    public void setPhoneNumber(Long phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getAddress() {
-        return address;
+    public String getPassword() {
+        return password;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getCity() {
-        return city;
+    public Role getRole() {
+        return role;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
     public String toString() {
-        return "Employee{" +
+        return "User{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", phoneNumber=" + phoneNumber +
-                ", address='" + address + '\'' +
-                ", city='" + city + '\'' +
-                ", zipCode='" + zipCode + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
                 '}';
     }
 }
+
+
+
