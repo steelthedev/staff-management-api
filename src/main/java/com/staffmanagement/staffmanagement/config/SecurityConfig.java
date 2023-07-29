@@ -17,10 +17,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsPasswordService;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -34,18 +31,20 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    public SecurityConfig(RsaKeyProperties rsaKeyProperties,UserServices userServices) {
+    public SecurityConfig(RsaKeyProperties rsaKeyProperties, UserServices userServices, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.rsaKeyProperties = rsaKeyProperties;
         this.userServices = userServices;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     private final  UserServices userServices;
     private final RsaKeyProperties rsaKeyProperties;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Bean
     public AuthenticationManager authenticationManager(UserServices userServices){
        var authProvider = new DaoAuthenticationProvider();
-       authProvider.setPasswordEncoder(passwordEncoder());
+       authProvider.setPasswordEncoder(bCryptPasswordEncoder);
        authProvider.setUserDetailsService(userServices);
        return new ProviderManager(authProvider);
     }
@@ -56,7 +55,7 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/api/employee")).permitAll()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/api/register")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/api/token")).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -71,11 +70,11 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }
-
-    @Bean
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+//
+//    @Bean
+//   public PasswordEncoder passwordEncoder(){
+//        return new BCryptPasswordEncoder();
+//    }
 
     @Bean
     JwtDecoder jwtDecoder(){

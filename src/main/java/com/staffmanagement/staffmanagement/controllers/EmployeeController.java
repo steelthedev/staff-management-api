@@ -39,8 +39,8 @@ public class EmployeeController {
         return repository.findAll();
     }
 
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
-    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('SCOPE_MANAGER')")
+    @ResponseStatus(value = HttpStatus.CREATED, reason = "Employee Created Successfully")
     @PostMapping("")
     public void add(@Valid @RequestBody Employee employee){
         repository.save(employee);
@@ -52,6 +52,8 @@ public class EmployeeController {
         orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"));
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_MANAGER')")
+    @ResponseStatus(value = HttpStatus.CREATED, reason = "Employee updated Successfully")
     @PutMapping("/{id}/update")
     public void update(@RequestBody Employee employee, @PathVariable Long id){
         if(!repository.existsById(id)){
