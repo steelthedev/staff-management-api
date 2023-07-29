@@ -9,5 +9,5 @@ import com.staffmanagement.staffmanagement.models.Employee;
 
 
 public interface EmployeeRepository extends CrudRepository<Employee,Long> {
-
+    void deleteById(Long id);
 }

@@ -1,6 +1,7 @@
 package com.staffmanagement.staffmanagement.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,7 +53,7 @@ public class EmployeeController {
         orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"));
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_MANAGER')")
+    @PreAuthorize("hasAuthority('SCOPE_MANAGER.write')")
     @ResponseStatus(value = HttpStatus.CREATED, reason = "Employee updated Successfully")
     @PutMapping("/{id}/update")
     public void update(@RequestBody Employee employee, @PathVariable Long id){
@@ -61,4 +62,16 @@ public class EmployeeController {
         }
         repository.save(employee);
     }
+
+
+    @PreAuthorize("hasAuthority('SCOPE_MANAGER')")
+    @ResponseStatus(value = HttpStatus.CREATED, reason = "Employee deleted Successfully")
+    @PostMapping("/delete/{id}")
+    public void delete(@PathVariable Long id){
+        if(!repository.existsById(id)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found", null);
+        }
+        repository.deleteById(id);
+    }
+
 }

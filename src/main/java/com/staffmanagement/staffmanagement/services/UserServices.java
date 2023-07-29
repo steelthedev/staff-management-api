@@ -1,5 +1,6 @@
 package com.staffmanagement.staffmanagement.services;
 
+import com.staffmanagement.staffmanagement.models.Role;
 import com.staffmanagement.staffmanagement.models.SecurityUser;
 import com.staffmanagement.staffmanagement.models.User;
 import com.staffmanagement.staffmanagement.repository.UserRepository;
@@ -57,5 +58,13 @@ public class UserServices implements UserDetailsService {
         repository.save(user);
 
         return "done";
+    }
+
+    public void toggleToManager(long id){
+        repository.findById(id).ifPresent(user -> {
+            user.setRole(Role.MANAGER);
+            repository.save(user);
+        });
+
     }
 }
