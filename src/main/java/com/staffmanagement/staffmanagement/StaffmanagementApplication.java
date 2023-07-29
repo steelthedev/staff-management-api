@@ -21,5 +21,17 @@ public class StaffmanagementApplication {
 		SpringApplication.run(StaffmanagementApplication.class, args);
 	}
 
+	public StaffmanagementApplication(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
+	private final UserRepository userRepository;
+	@Bean
+	CommandLineRunner commandLineRunner(PasswordEncoder encoder){
+		return args -> {
+		userRepository.save(new User(
+				"iyanu","akinwumi","akin@gmail.com","kal23",encoder.encode("kal"),Role.MANAGER
+		));
+		};
+	}
 }
